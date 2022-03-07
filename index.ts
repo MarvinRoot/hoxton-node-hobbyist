@@ -14,6 +14,11 @@ app.get('/users', async (req,res) => {
     res.send(users)
 })
 
+app.get('/hobbies', async (req,res) => {
+    const hobbies = await prisma.hobby.findMany({include: {user: true}})
+    res.send(hobbies)
+})
+
 app.listen(4001, () => {
     console.log('Server up: http://localhost:4001');
 })
