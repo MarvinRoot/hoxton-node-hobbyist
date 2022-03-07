@@ -10,10 +10,10 @@ app.use(express.json())
 const prisma = new PrismaClient()
 
 app.get('/users', async (req,res) => {
-    const users = await prisma.user.findMany()
+    const users = await prisma.user.findMany({include: {hobby: true}})
     res.send(users)
 })
 
-app.listen(4000, () => {
-    console.log('Server up: http://localhost:4000');
+app.listen(4001, () => {
+    console.log('Server up: http://localhost:4001');
 })

@@ -12,7 +12,7 @@ model User {
   fullName String
   photoUrl String
   email    String  @unique
-  hobby    Hobby[]
+  hobby Hobby[]
 }
 
 model Hobby {

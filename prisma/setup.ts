@@ -36,9 +36,7 @@ const users = [
 
 async function createTable() {
     for(const user of users) {
-        await prisma.user.create({
-            data: {user}
-        })
+        await prisma.user.create({ data: user })
     }
 }
 
