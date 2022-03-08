@@ -7,36 +7,41 @@ const users = [
         fullName: 'Marvin Aliaj',
         photoUrl: 'marvin.jpeg',
         email: 'marvin@email.com',
-        hobby: {create: [
-            {
-                name: 'Playing basketball', 
-                imageUrl: 'basket.jpeg',
-                active: true
-            },
-            {
-                name: 'Drawing',
-                imageUrl: 'drawing.jpeg',
-                active: false
-            }
-        ]}
+        hobby: { connect: [{name: 'Playing basketball'}, {name: 'Drawing'}]}
     },
     {
         fullName: 'LeBron James',
         photoUrl: 'lebron.jpeg',
         email: 'lebron@email.com',
-        hobby: {create: [
-            {
-                name: 'Listening to music',
-                imageUrl: 'music.jpeg',
-                active: false
-            }
-        ]}
+        hobby: { connect: {name: 'Listening to music'}}
+    }
+]
+
+const hobbies = [
+    {
+        name: 'Playing basketball', 
+        imageUrl: 'basket.jpeg',
+        active: true
+    },
+    {
+        name: 'Drawing',
+        imageUrl: 'drawing.jpeg',
+        active: false
+    },
+    {
+        name: 'Listening to music',
+        imageUrl: 'music.jpeg',
+        active: false
     }
 ]
 
 async function createTable() {
     for(const user of users) {
         await prisma.user.create({ data: user })
+    }
+
+    for(const hobby of hobbies) {
+        await prisma.hobby.create({ data: hobby })
     }
 }
 

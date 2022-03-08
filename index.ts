@@ -19,6 +19,68 @@ app.get('/hobbies', async (req,res) => {
     res.send(hobbies)
 })
 
+app.post('/users', async (req,res) => {
+    const { fullName, photoUrl, email, hobbies = [] } = req.body
+
+  const newUser = await prisma.user.create({
+    data: {
+      fullName,
+      photoUrl,
+      email,
+      hobby: {
+        // an array of {where, create} data for hobbies
+        connectOrCreate: hobbies.map((hobby: any) => ({
+          // try to find the hobby if it exists
+          where: { name: hobby.name },
+          // if it doesn't exist, create a new hobby
+          create: hobby
+        }))
+      }
+    },
+    include: {
+      hobby: true
+    }
+  })
+  res.send(newUser)
+})
+
+app.delete('/users', async (req,res) => {
+    const {email} = req.body
+
+    const user = await prisma.user.delete({
+        where: {email: email}
+    })
+
+    res.send(user)
+})
+
+app.patch('/users', async (req,res) => {
+    const{email, hobby} = req.body
+
+    const updatedUser = await prisma.user.update({
+        where: {email: email},
+        data: {
+            hobby: {
+                connectOrCreate: {
+                    where: {name: hobby.name},
+                    create: hobby
+                }
+            }
+        }
+    })
+    res.send(updatedUser)
+})
+
+app.get('/users/:id', async (req,res) => {
+    const id = Number(req.params.id)
+
+    const user = await prisma.user.findUnique({
+        where: {id: id},
+        include: {hobby: true}
+    })
+    res.send(user)
+})
+
 app.listen(4001, () => {
     console.log('Server up: http://localhost:4001');
 })
